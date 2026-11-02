@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>YDS Night · Admin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E0C0A'/%3E%3Ctext x='32' y='42' font-size='24' font-family='Georgia' font-weight='700' text-anchor='middle' fill='%23F5A800'%3EYDS%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --page:#F7F5F2;--surface:#fff;--nude:#F3ECDD;--prune:#8A6000;--prune-f:#6E4D00;--or:#9A7A36;--txt:#211C14;--gris:#6B6354;
+  --bord:#E7E0D4;--err:#B3261E;--err-f:#FCEBEB;--ok:#2E7D4F;--ok-f:#E5F3EA;--or-f:#F7EEDB;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#14110C;--surface:#1F1B14;--nude:#2E281C;--prune:#F5A800;--prune-f:#C98A00;--or:#D9B66E;--txt:#F3ECDD;--gris:#B3A994;
+  --bord:#3C3528;--err:#F28B82;--err-f:#3D2023;--ok:#6FCF97;--ok-f:#1D3428;--or-f:#3A3020;}}
+:root[data-theme="dark"]{
+  --page:#14110C;--surface:#1F1B14;--nude:#2E281C;--prune:#F5A800;--prune-f:#C98A00;--or:#D9B66E;--txt:#F3ECDD;--gris:#B3A994;
+  --bord:#3C3528;--err:#F28B82;--err-f:#3D2023;--ok:#6FCF97;--ok-f:#1D3428;--or-f:#3A3020;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--txt);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{margin:0;font-weight:700}
+.serif{font-family:Georgia,"Times New Roman",serif}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+header.top{background:var(--surface);border-bottom:1px solid var(--bord);position:sticky;top:0;z-index:5}
+header.top .wrap{display:flex;align-items:center;gap:10px;min-height:56px}
+.logo{font-family:Georgia,serif;font-size:22px;color:var(--prune);font-weight:700}
+.logo i{color:var(--or);font-weight:400;font-style:normal}
+.sp{flex:1}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:8px 0}
+.tab{border:0;background:none;color:var(--gris);padding:8px 14px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab[aria-selected=true]{background:var(--prune);color:#fff}
+.badge{background:var(--err);color:#fff;border-radius:999px;font-size:12px;padding:1px 7px;margin-left:6px}
+main{padding:20px 0 60px}
+.card{background:var(--surface);border:1px solid var(--bord);border-radius:16px;padding:16px;margin-bottom:12px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--bord);border-radius:16px;padding:14px}
+.stat b{display:block;font-size:24px;font-family:Georgia,serif;color:var(--prune);overflow-wrap:anywhere}
+.stat span{color:var(--gris);font-size:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--gris);font-size:14px}
+.key{font-family:ui-monospace,Consolas,monospace;letter-spacing:2px;font-weight:700;font-size:20px}
+.pill{display:inline-block;border-radius:8px;padding:3px 10px;font-size:13px;font-weight:600}
+.p-ok{background:var(--ok-f);color:var(--ok)}.p-or{background:var(--or-f);color:var(--or)}.p-err{background:var(--err-f);color:var(--err)}.p-nude{background:var(--nude);color:var(--gris)}
+button,.btn{font:inherit;border-radius:12px;border:1px solid var(--bord);background:var(--surface);color:var(--txt);padding:9px 14px;cursor:pointer;font-weight:600}
+button.main,.btn.main{background:var(--prune);border-color:var(--prune);color:#fff}
+button.sm{padding:6px 10px;font-size:14px}
+button.danger{color:var(--err)}
+button:disabled{opacity:.55;cursor:default}
+input,select,textarea{font:inherit;color:var(--txt);background:var(--page);border:1px solid var(--bord);border-radius:12px;padding:10px 12px;width:100%}
+input:focus,select:focus{outline:2px solid var(--prune);outline-offset:0}
+label{display:block;font-size:14px;color:var(--gris);margin:12px 0 4px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.search{margin-bottom:12px}
+.link{background:none;border:0;color:var(--prune);padding:0;cursor:pointer;text-align:left;font-weight:700;font-size:17px}
+h2{font-family:Georgia,serif;font-size:24px;margin-bottom:12px}
+.back{margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:8px 6px;border-top:1px solid var(--bord);text-align:left;vertical-align:top}
+th{color:var(--gris);font-weight:600}
+.scroll{overflow-x:auto}
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.dlg{background:var(--surface);border-radius:20px;padding:20px;width:100%;max-width:460px;max-height:92vh;overflow:auto}
+.dlg h3{font-family:Georgia,serif;font-size:21px;margin-bottom:4px}
+.dlg .bar{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+.keybox{background:var(--nude);border-radius:12px;padding:16px 10px;text-align:center;margin:12px 0;user-select:all}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--txt);color:var(--page);padding:10px 16px;border-radius:12px;z-index:30;max-width:90vw;display:none}
+.login{max-width:420px;margin:8vh auto 0}
+.err{background:var(--err-f);color:var(--err);padding:10px 12px;border-radius:12px;margin-top:12px;display:none}
+.center{text-align:center}
+.empty{text-align:center;color:var(--gris);padding:30px 0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+'use strict';
+// ====================================================================
+// YDS Night · Admin : page d'administration (separee du logiciel des clubs).
+// La cle ci-dessous est la cle PUBLIQUE : la securite est assuree par la
+// base de donnees (seule l'adresse administrateur peut appeler ces fonctions).
+// ====================================================================
+const URL_SB = 'https://jdrnvritfovhebiwkrub.supabase.co';
+const CLE_PUBLIQUE = 'sb_publishable_j72UqsJabjvsklAoWLG_ZA_oIMKSe2d';
+const sb = supabase.createClient(URL_SB, CLE_PUBLIQUE, { auth: { persistSession: true, autoRefreshToken: true } });
+
+// ---------- utilitaires ----------
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nb = (v) => (Number(v) || 0);
+const fcfa = (n) => nb(n).toLocaleString('fr-FR').replace(/ | /g, ' ') + ' FCFA';
+const date = (v) => (v ? new Date(v) : null);
+const dcourt = (d) => (d ? d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
+const ilYa = (d) => {
+  if (!d) return 'aucune soirée';
+  const j = Math.floor((Date.now() - d.getTime()) / 864e5);
+  return j <= 0 ? "aujourd'hui" : j === 1 ? 'hier' : `il y a ${j} jours`;
+};
+let toastT;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => (t.style.display = 'none'), 3800); }
+function msgErreur(e) {
+  const m = (e && (e.message || e.error_description)) || String(e);
+  if (/Invalid login credentials/i.test(m)) return 'E-mail ou mot de passe incorrect.';
+  if (/Email not confirmed/i.test(m)) return "Cette adresse n'est pas encore confirmée.";
+  if (/rate limit|too many/i.test(m)) return 'Trop de tentatives. Patientez quelques minutes.';
+  if (/Failed to fetch|NetworkError/i.test(m)) return 'Pas de connexion internet.';
+  return m;
+}
+async function rpc(nom, params) {
+  const { data, error } = await sb.rpc(nom, params || {});
+  if (error) throw error;
+  return data;
+}
+function numeroWhatsApp(t) {
+  let d = String(t || '').replace(/\D/g, '');
+  if (d.startsWith('00')) d = d.slice(2);
+  if (d.length === 8) d = '228' + d;
+  return d.length >= 10 ? d : null;
+}
+function whatsapp(tel, texte) {
+  const n = numeroWhatsApp(tel);
+  window.open(`https://wa.me/${n || ''}?text=${encodeURIComponent(texte)}`, '_blank', 'noopener');
+}
+async function copier(t) {
+  try { await navigator.clipboard.writeText(t); toast('Copié.'); } catch { toast('Copie impossible : sélectionnez le texte.'); }
+}
+
+// ---------- fenetres ----------
+function fenetre({ titre, html, boutons }) {
+  return new Promise((resolve) => {
+    const v = document.createElement('div');
+    v.className = 'veil';
+    v.innerHTML = `<div class="dlg" role="dialog" aria-modal="true"><h3>${esc(titre)}</h3>${html || ''}<div class="bar"></div></div>`;
+    const bar = $('.bar', v);
+    const fermer = (val) => { v.remove(); resolve(val); };
+    for (const b of boutons) {
+      const el = document.createElement('button');
+      el.textContent = b.texte;
+      if (b.main) el.className = 'main';
+      el.onclick = async () => {
+        if (b.action) {
+          el.disabled = true;
+          try { const r = await b.action(v); if (r === false) { el.disabled = false; return; } fermer(r ?? true); }
+          catch (e) { toast(msgErreur(e)); el.disabled = false; }
+        } else fermer(b.valeur ?? false);
+      };
+      bar.append(el);
+    }
+    v.addEventListener('mousedown', (e) => { if (e.target === v) fermer(false); });
+    document.body.append(v);
+    const f = $('input,select', v); if (f) f.focus();
+  });
+}
+const champ = (id, label, valeur = '', type = 'text', extra = '') =>
+  `<label for="${id}">${esc(label)}</label><input id="${id}" type="${type}" value="${esc(valeur)}" ${extra}>`;
+const choix = (id, label, options, valeur) =>
+  `<label for="${id}">${esc(label)}</label><select id="${id}">${options.map(([v, t]) => `<option value="${esc(v)}"${String(v) === String(valeur) ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select>`;
+const confirmer = (titre, texte, ok = 'Confirmer', danger = false) =>
+  fenetre({ titre, html: `<p>${esc(texte)}</p>`, boutons: [{ texte: 'Annuler' }, { texte: ok, main: !danger, action: () => true }] });
+
+// ---------- etat ----------
+const S = { user: null, tab: 'vue', fiche: null, donnees: null, recherche: '' };
+const app = $('#app');
+const MOYENS = [['mobile_money', 'Mobile Money'], ['cash', 'Espèces'], ['bank', 'Virement'], ['other', 'Autre']];
+const LIB_MOYEN = Object.fromEntries(MOYENS);
+const LIB_ETAT = { actif: 'Actif', bientot: 'Bientôt', grace: 'En grâce', bloque: 'Bloqué' };
+const pillEtat = (e) => `<span class="pill ${e === 'actif' ? 'p-ok' : e === 'bientot' ? 'p-or' : 'p-err'}">${esc(LIB_ETAT[e] || e)}</span>`;
+
+// =====================================================================
+// Connexion (e-mail + mot de passe)
+// =====================================================================
+function ecranConnexion(mode = 'connexion', email = '') {
+  const titre = { connexion: 'Connexion', inscription: 'Créer le compte administrateur', mdp: 'Mot de passe oublié' }[mode];
+  app.innerHTML = `
+  <div class="wrap"><div class="login card">
+    <div class="center"><div class="logo" style="font-size:30px">YDS <i>Night</i></div>
+    <p class="muted">Espace réservé à l'administrateur</p></div>
+    <h3 class="serif" style="font-size:22px;margin-top:8px">${titre}</h3>
+    <form id="f" novalidate>
+      ${champ('email', 'Adresse e-mail', email, 'email', 'autocomplete="username" inputmode="email"')}
+      ${mode === 'mdp' ? '' : champ('mdp', 'Mot de passe' + (mode === 'inscription' ? ' (8 caractères minimum)' : ''), '', 'password', `autocomplete="${mode === 'inscription' ? 'new-password' : 'current-password'}"`)}
+      <div class="err" id="err"></div>
+      <div class="actions"><button class="main" style="width:100%" id="ok">${mode === 'connexion' ? 'Se connecter' : mode === 'inscription' ? 'Recevoir le code par e-mail' : 'Recevoir le code'}</button></div>
+    </form>
+    <div class="actions" style="justify-content:space-between">
+      ${mode === 'connexion'
+        ? `<button class="sm" data-m="mdp" type="button">Mot de passe oublié</button><button class="sm" data-m="inscription" type="button">Première connexion</button>`
+        : `<button class="sm" data-m="connexion" type="button">← Retour</button>`}
+    </div>
+  </div></div>`;
+  const err = (m) => { const e = $('#err'); e.textContent = m; e.style.display = m ? 'block' : 'none'; };
+  app.querySelectorAll('[data-m]').forEach((b) => (b.onclick = () => ecranConnexion(b.dataset.m, $('#email').value.trim())));
+  $('#f').onsubmit = async (ev) => {
+    ev.preventDefault();
+    const email = $('#email').value.trim().toLowerCase();
+    const mdp = mode === 'mdp' ? '' : $('#mdp').value;
+    if (!/^\S+@\S+\.\S+$/.test(email)) return err('Adresse e-mail incorrecte.');
+    if (mode !== 'mdp' && !mdp) return err('Tapez le mot de passe.');
+    if (mode === 'inscription' && mdp.length < 8) return err('Le mot de passe doit avoir au moins 8 caractères.');
+    const ok = $('#ok'); ok.disabled = true; err('');
+    try {
+      if (mode === 'connexion') {
+        const { error } = await sb.auth.signInWithPassword({ email, password: mdp });
+        if (error) throw error;
+      } else if (mode === 'inscription') {
+        const { data, error } = await sb.auth.signUp({ email, password: mdp });
+        if (error) throw error;
+        if (data.user && data.user.identities && data.user.identities.length === 0) {
+          throw new Error('Ce compte existe déjà : utilisez « Se connecter » ou « Mot de passe oublié ».');
+        }
+        if (!data.session) return ecranCode('signup', email, mdp);
+      } else {
+        const { error } = await sb.auth.resetPasswordForEmail(email);
+        if (error) throw error;
+        return ecranCode('recovery', email, '');
+      }
+    } catch (e) { err(msgErreur(e)); ok.disabled = false; }
+  };
+}
+
+function ecranCode(type, email) {
+  app.innerHTML = `
+  <div class="wrap"><div class="login card">
+    <h3 class="serif" style="font-size:22px">Code reçu par e-mail</h3>
+    <p class="muted">Un code a été envoyé à <b>${esc(email)}</b>. Vérifiez aussi les courriers indésirables.</p>
+    <form id="f" novalidate>
+      ${champ('code', 'Code', '', 'text', 'inputmode="numeric" autocomplete="one-time-code" maxlength="10"')}
+      ${type === 'recovery' ? champ('nv', 'Nouveau mot de passe (8 caractères minimum)', '', 'password', 'autocomplete="new-password"') : ''}
+      <div class="err" id="err"></div>
+      <div class="actions"><button class="main" style="width:100%" id="ok">Valider</button></div>
+    </form>
+    <div class="actions" style="justify-content:space-between">
+      <button class="sm" id="renv" type="button">Renvoyer le code</button>
+      <button class="sm" id="ret" type="button">← Retour</button>
+    </div>
+  </div></div>`;
+  const err = (m) => { const e = $('#err'); e.textContent = m; e.style.display = m ? 'block' : 'none'; };
+  $('#ret').onclick = () => ecranConnexion('connexion', email);
+  $('#renv').onclick = async () => {
+    try {
+      const { error } = type === 'signup' ? await sb.auth.resend({ type: 'signup', email }) : await sb.auth.resetPasswordForEmail(email);
+      if (error) throw error; toast('Code renvoyé.');
+    } catch (e) { err(msgErreur(e)); }
+  };
+  $('#f').onsubmit = async (ev) => {
+    ev.preventDefault();
+    const code = $('#code').value.replace(/\s/g, '');
+    if (!code) return err('Tapez le code reçu.');
+    const nv = type === 'recovery' ? $('#nv').value : '';
+    if (type === 'recovery' && nv.length < 8) return err('Le mot de passe doit avoir au moins 8 caractères.');
+    const ok = $('#ok'); ok.disabled = true; err('');
+    try {
+      const { error } = await sb.auth.verifyOtp({ email, token: code, type });
+      if (error) throw error;
+      if (type === 'recovery') { const r = await sb.auth.updateUser({ password: nv }); if (r.error) throw r.error; }
+    } catch (e) { err(msgErreur(e)); ok.disabled = false; }
+  };
+}
+
+// =====================================================================
+// Application
+// =====================================================================
+async function demarrer(user) {
+  S.user = user;
+  app.innerHTML = '<div class="empty">Chargement…</div>';
+  let admin = false;
+  try { admin = (await rpc('is_platform_admin')) === true; } catch (e) { return erreurPlein(e); }
+  if (!admin) {
+    app.innerHTML = `<div class="wrap"><div class="login card center">
+      <h3 class="serif" style="font-size:22px">Accès refusé</h3>
+      <p>Le compte <b>${esc(user.email)}</b> n'a pas les droits d'administrateur.</p>
+      <div class="actions" style="justify-content:center"><button class="main" id="out">Se déconnecter</button></div></div></div>`;
+    $('#out').onclick = () => sb.auth.signOut();
+    return;
+  }
+  S.tab = 'vue'; S.fiche = null;
+  squelette();
+  charger();
+}
+function erreurPlein(e) {
+  app.innerHTML = `<div class="wrap"><div class="login card center"><p>${esc(msgErreur(e))}</p>
+    <div class="actions" style="justify-content:center"><button class="main" id="r">Réessayer</button><button id="out">Déconnexion</button></div></div></div>`;
+  $('#r').onclick = () => demarrer(S.user); $('#out').onclick = () => sb.auth.signOut();
+}
+
+function squelette() {
+  app.innerHTML = `
+  <header class="top"><div class="wrap">
+    <div class="logo">YDS <i>Night</i></div><div class="sp"></div>
+    <span class="muted" style="display:none" id="qui"></span>
+    <button class="sm" id="th" title="Clair / sombre" aria-label="Clair / sombre">◐</button>
+    <button class="sm" id="out">Déconnexion</button>
+  </div>
+  <div class="wrap"><div class="tabs" role="tablist" id="tabs"></div></div></header>
+  <main class="wrap" id="main"></main>`;
+  $('#out').onclick = () => sb.auth.signOut();
+  $('#th').onclick = () => {
+    const r = document.documentElement;
+    const sombre = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    r.dataset.theme = sombre ? 'light' : 'dark';
+    try { localStorage.setItem('yds-theme', r.dataset.theme); } catch {}
+  };
+  const q = $('#qui'); q.textContent = S.user.email; if (innerWidth > 700) q.style.display = '';
+}
+
+async function charger() {
+  $('#main').innerHTML = '<div class="empty">Chargement…</div>';
+  try {
+    await charger0();
+    afficher();
+  } catch (e) {
+    $('#main').innerHTML = `<div class="card center"><p>${esc(msgErreur(e))}</p><button class="main" id="r">Réessayer</button></div>`;
+    $('#r').onclick = charger;
+  }
+}
+async function charger0() {
+  const [ap, cl] = await Promise.all([rpc('admin_overview'), rpc('admin_clubs')]);
+  S.donnees = { ap, clubs: (cl || []).map(club) };
+}
+function club(j) {
+  const c = { ...j, creeLe: date(j.cree_le), expireLe: date(j.expire_le), derniereSoiree: date(j.derniere_soiree) };
+  c.aRelancer = c.etat === 'grace' || c.etat === 'bloque' || c.etat === 'bientot';
+  return c;
+}
+
+// ---------- affichage ----------
+function afficher() {
+  const d = S.donnees;
+  const aRel = d.clubs.filter((c) => c.aRelancer);
+  const tabs = [['vue', "Vue d'ensemble"], ['clubs', 'Clubs'], ['relance', 'À relancer']];
+  $('#tabs').innerHTML = tabs.map(([k, t]) =>
+    `<button class="tab" role="tab" data-t="${k}" aria-selected="${S.tab === k && !S.fiche}">${t}${k === 'relance' && aRel.length ? `<span class="badge">${aRel.length}</span>` : ''}</button>`).join('');
+  $('#tabs').querySelectorAll('[data-t]').forEach((b) => (b.onclick = () => { S.tab = b.dataset.t; S.fiche = null; S.recherche = ''; afficher(); }));
+  const m = $('#main');
+  if (S.fiche) return pageFiche(m);
+  if (S.tab === 'vue') pageVue(m, d, aRel);
+  else if (S.tab === 'clubs') pageClubs(m, d.clubs, false);
+  else pageClubs(m, aRel, true);
+}
+
+function pageVue(m, d, aRel) {
+  const a = d.ap;
+  const st = (v, t) => `<div class="stat"><b>${esc(v)}</b><span>${esc(t)}</span></div>`;
+  m.innerHTML = `
+  <div class="row" style="justify-content:space-between;margin-bottom:12px"><h2 style="margin:0">Vue d'ensemble</h2><button class="main" id="nc">+ Nouveau club</button></div>
+  <div class="grid">
+    ${st(fcfa(a.encaisse_mois), 'Encaissé ce mois-ci')}
+    ${st(fcfa(a.revenu_mensuel), 'Revenu mensuel attendu')}
+    ${st(nb(a.clubs), 'Clubs')}
+    ${st(nb(a.actifs), 'Actifs')}
+  </div>
+  <div class="grid">
+    ${st(nb(a.fin_proche), 'Fin proche (< 7 j)')}${st(nb(a.en_grace), 'En grâce')}${st(nb(a.bloques), 'Bloqués')}
+  </div>
+  <div class="card"><b>À relancer</b>
+    ${aRel.length ? `<p class="muted">${aRel.length} club${aRel.length > 1 ? 's' : ''} à contacter (abonnement bientôt fini, en grâce ou bloqué).</p><button class="main sm" data-t2="relance">Voir la liste</button>` : '<p class="muted">Aucun club à relancer pour le moment.</p>'}
+  </div>`;
+  const r = $('[data-t2]', m); if (r) r.onclick = () => { S.tab = 'relance'; afficher(); };
+  $('#nc', m).onclick = nouveauClub;
+}
+
+function pageClubs(m, liste, relance) {
+  const q = S.recherche.toLowerCase();
+  const f = liste.filter((c) => !q || [c.nom, c.patron, c.code, c.telephone].some((v) => (v || '').toLowerCase().includes(q)));
+  m.innerHTML = `<div class="row" style="justify-content:space-between;margin-bottom:12px"><h2 style="margin:0">${relance ? 'À relancer' : 'Clubs'}</h2>${relance ? '' : '<button class="main" id="nc">+ Nouveau club</button>'}</div>
+    <input class="search" id="q" placeholder="Chercher (nom, patron, code, téléphone)" value="${esc(S.recherche)}">
+    <div id="liste">${f.length ? f.map((c) => `
+      <div class="card"><div class="row"><div style="flex:1;min-width:180px">
+        <button class="link" data-c="${esc(c.id)}">${esc(c.nom || 'Sans nom')}</button>
+        <div class="muted">${esc(c.patron || '')}${c.telephone ? ' · ' + esc(c.telephone) : ''} · code <b>${esc(c.code)}</b></div>
+        <div class="muted">fin : ${dcourt(c.expireLe)} · ${fcfa(c.mensuel)}/mois · ${ilYa(c.derniereSoiree)}</div></div>
+        ${pillEtat(c.etat)}</div></div>`).join('') : `<div class="empty">${relance ? 'Aucun club à relancer.' : 'Aucun club. Créez le premier avec « Nouveau club ».'}</div>`}</div>`;
+  const nc = $('#nc', m); if (nc) nc.onclick = nouveauClub;
+  const q2 = $('#q', m);
+  q2.oninput = () => { S.recherche = q2.value; const p = q2.selectionStart; pageClubs(m, liste, relance); const n = $('#q', m); n.focus(); n.setSelectionRange(p, p); };
+  m.querySelectorAll('[data-c]').forEach((b) => (b.onclick = () => ouvrirFiche(b.dataset.c)));
+}
+
+async function ouvrirFiche(id) {
+  try { S.fiche = await rpc('admin_club_detail', { p_club_id: id }); afficher(); }
+  catch (e) { toast(msgErreur(e)); }
+}
+async function rafraichirFiche() { const id = S.fiche.id; await charger0(); await ouvrirFiche(id); }
+
+function etatFiche(f) {
+  return `<span class="pill ${f.etat === 'actif' ? 'p-ok' : f.etat === 'bientot' ? 'p-or' : 'p-err'}">${esc(LIB_ETAT[f.etat] || f.etat)}</span>`;
+}
+
+function pageFiche(m) {
+  const f = S.fiche;
+  m.innerHTML = `
+  <button class="sm back" id="ret">← Retour</button>
+  <h2>${esc(f.nom)}</h2>
+  <div class="card">
+    <div class="row"><div style="flex:1">
+      <div>${esc(f.patron || '')}${f.telephone ? ' · ' + esc(f.telephone) : ''}</div>
+      <div class="muted">Code du club : <b class="key" style="font-size:16px">${esc(f.code)}</b></div>
+      <div class="muted">Créé le ${dcourt(date(f.cree_le))} · ${nb(f.equipe)} membre${nb(f.equipe) > 1 ? 's' : ''}</div>
+      <div class="muted">Fin d'abonnement : ${dcourt(date(f.expire_le))} · ${fcfa(f.mensuel)}/mois</div>
+    </div>${etatFiche(f)}</div>
+    <div class="actions">
+      <button class="sm" data-a="code">Code / envoyer</button>
+      <button class="sm main" data-a="paie">Paiement reçu</button>
+      <button class="sm" data-a="prol">Offrir des jours</button>
+      <button class="sm" data-a="fin">Date de fin</button>
+      <button class="sm" data-a="prix">Changer le prix</button>
+      <button class="sm" data-a="pin">Réinitialiser le PIN patron</button>
+      <button class="sm ${f.suspended ? '' : 'danger'}" data-a="susp">${f.suspended ? 'Réactiver' : 'Suspendre'}</button>
+      <button class="sm" data-a="rel">Relancer (WhatsApp)</button>
+      <button class="sm danger" data-a="sup">Supprimer le club</button>
+    </div>
+  </div>
+  <h3 style="margin:16px 0 8px">Paiements reçus</h3>
+  <div class="card scroll">${(f.paiements || []).length ? `<table><tr><th>Date</th><th>Montant</th><th>Mois</th><th>Moyen</th><th>Jusqu'au</th></tr>
+    ${f.paiements.map((p) => `<tr><td>${dcourt(date(p.le))}</td><td>${fcfa(p.montant)}</td><td>${nb(p.mois)}</td><td>${esc(LIB_MOYEN[p.moyen] || p.moyen)}${p.note ? `<div class="muted">${esc(p.note)}</div>` : ''}</td><td>${dcourt(date(p.jusqu_au))}</td></tr>`).join('')}</table>` : '<p class="muted">Aucun paiement enregistré.</p>'}</div>`;
+  $('#ret', m).onclick = () => { S.fiche = null; afficher(); };
+  m.querySelectorAll('[data-a]').forEach((b) => (b.onclick = () => actionClub(b.dataset.a, f)));
+}
+
+// ---------- actions sur un club ----------
+function texteCode(f) {
+  return `Bonjour${f.patron ? ' ' + f.patron : ''}, voici le code de votre club YDS Night : ${f.code}\n` +
+    `Sur chaque appareil (PC du bar, téléphone), ouvrez YDS Night, saisissez ce code une seule fois, ` +
+    `puis connectez-vous avec votre identifiant « ${esc(f.patron_login || 'patron')} » et votre code PIN. Gardez ce message.`;
+}
+function texteRelance(f) {
+  const fin = dcourt(date(f.expire_le));
+  const prix = fcfa(f.mensuel);
+  const nom = `« ${f.nom} »`;
+  if (f.etat === 'bloque') return `Bonjour${f.patron ? ' ' + f.patron : ''}, le logiciel YDS Night de ${nom} est en pause : l'abonnement n'est pas réglé. Vos données sont en sécurité. Dès réception de ${prix}, nous réactivons immédiatement.`;
+  if (f.etat === 'grace') return `Bonjour${f.patron ? ' ' + f.patron : ''}, l'abonnement YDS Night de ${nom} est arrivé à échéance le ${fin}. Merci de régler ${prix} pour éviter la coupure du logiciel.`;
+  return `Bonjour${f.patron ? ' ' + f.patron : ''}, l'abonnement YDS Night de ${nom} se termine le ${fin}. Pensez à le renouveler (${prix}/mois) pour continuer sans interruption. Merci !`;
+}
+
+async function actionClub(a, f) {
+  try {
+    if (a === 'code') return montrerCode(f);
+    if (a === 'rel') return whatsapp(f.telephone, texteRelance(f));
+    if (a === 'paie') return paiement(f);
+    if (a === 'prol') return prolonger(f);
+    if (a === 'fin') return dateFin(f);
+    if (a === 'prix') return changerPrix(f);
+    if (a === 'pin') return resetPin(f);
+    if (a === 'susp') {
+      if (!f.suspended && !(await confirmer('Suspendre le club', 'Le logiciel sera bloqué immédiatement pour ce club, jusqu\'à réactivation.', 'Suspendre', true))) return;
+      await rpc('admin_set_suspended', { p_club_id: f.id, p_suspendre: !f.suspended });
+      toast(f.suspended ? 'Club réactivé.' : 'Club suspendu.');
+      return rafraichirFiche();
+    }
+    if (a === 'sup') {
+      if (!(await confirmer('Supprimer le club', `Supprimer « ${f.nom} » avec toutes ses données (équipe, soirées, ventes) ? Définitif.`, 'Supprimer', true))) return;
+      await rpc('admin_delete_club', { p_club_id: f.id });
+      toast('Club supprimé.');
+      S.fiche = null; await charger(); return;
+    }
+  } catch (e) { toast(msgErreur(e)); }
+}
+
+function montrerCode(f) {
+  return fenetre({
+    titre: 'Code du club',
+    html: `<div class="keybox key">${esc(f.code)}</div>
+      <p class="muted">À donner au club. Il le saisit une fois sur chaque appareil, puis se connecte avec identifiant + code PIN.</p>`,
+    boutons: [{ texte: 'Fermer' },
+      { texte: 'Copier', action: () => { copier(f.code); return false; } },
+      { texte: 'WhatsApp', main: true, action: () => { whatsapp(f.telephone, texteCode(f)); return false; } }],
+  });
+}
+
+async function paiement(f) {
+  const ok = await fenetre({
+    titre: `Paiement de ${f.nom}`,
+    html: champ('mt', 'Montant reçu (FCFA)', nb(f.mensuel) > 0 ? f.mensuel : '', 'number', 'min="1" inputmode="numeric"') +
+      choix('mo', 'Mois payés', [1, 2, 3, 6, 12].map((n) => [n, `${n} mois`]), 1) +
+      choix('my', 'Moyen de paiement', MOYENS, 'mobile_money') + champ('nt', 'Note (facultatif)'),
+    boutons: [{ texte: 'Annuler' }, { texte: 'Enregistrer', main: true, action: async (v) => {
+      const mt = parseInt($('#mt', v).value, 10);
+      if (!(mt > 0)) { toast('Indiquez le montant reçu.'); return false; }
+      return { fin: await rpc('admin_record_payment', { p_club_id: f.id, p_amount: mt, p_months: parseInt($('#mo', v).value, 10), p_method: $('#my', v).value, p_note: $('#nt', v).value.trim() || null }) };
+    } }],
+  });
+  if (!ok) return;
+  toast(ok.fin ? `Paiement enregistré. Abonnement jusqu'au ${dcourt(date(ok.fin))}.` : 'Paiement enregistré.');
+  rafraichirFiche();
+}
+
+async function prolonger(f) {
+  const ok = await fenetre({
+    titre: 'Offrir des jours',
+    html: champ('pj', 'Jours en plus', '7', 'number', 'min="1" max="365" inputmode="numeric"') + '<p class="muted">Geste commercial : prolonge la date de fin sans paiement.</p>',
+    boutons: [{ texte: 'Annuler' }, { texte: 'Prolonger', main: true, action: async (v) => {
+      const jo = parseInt($('#pj', v).value, 10) || 0;
+      if (jo < 1) { toast('Indiquez le nombre de jours.'); return false; }
+      await rpc('admin_extend', { p_club_id: f.id, p_days: jo });
+    } }],
+  });
+  if (ok) { toast('Abonnement prolongé.'); rafraichirFiche(); }
+}
+
+async function dateFin(f) {
+  const init = f.expire_le ? new Date(f.expire_le).toISOString().slice(0, 10) : '';
+  const ok = await fenetre({
+    titre: 'Date de fin',
+    html: champ('df', 'Date de fin', init, 'date') + '<p class="muted">Laissez vide puis « Sans date de fin » pour un abonnement illimité.</p>',
+    boutons: [{ texte: 'Annuler' },
+      { texte: 'Sans date de fin', action: async () => { await rpc('admin_set_expiry', { p_club_id: f.id, p_expires_at: null }); } },
+      { texte: 'Enregistrer', main: true, action: async (v) => {
+        const d = $('#df', v).value;
+        if (!d) { toast('Choisissez une date.'); return false; }
+        await rpc('admin_set_expiry', { p_club_id: f.id, p_expires_at: new Date(d + 'T23:59:00').toISOString() });
+      } }],
+  });
+  if (ok) { toast('Date de fin modifiée.'); rafraichirFiche(); }
+}
+
+async function changerPrix(f) {
+  const ok = await fenetre({
+    titre: 'Prix mensuel',
+    html: champ('px', 'Prix par mois (FCFA)', nb(f.mensuel), 'number', 'min="0" inputmode="numeric"'),
+    boutons: [{ texte: 'Annuler' }, { texte: 'Enregistrer', main: true, action: async (v) => {
+      const p = parseInt($('#px', v).value, 10);
+      if (!(p >= 0)) { toast('Prix invalide.'); return false; }
+      await rpc('admin_set_price', { p_club_id: f.id, p_price: p });
+    } }],
+  });
+  if (ok) { toast('Prix modifié.'); rafraichirFiche(); }
+}
+
+async function resetPin(f) {
+  const ok = await fenetre({
+    titre: 'Réinitialiser le PIN du patron',
+    html: champ('np', 'Nouveau code PIN (6 chiffres)', '', 'text', 'inputmode="numeric" maxlength="6"') +
+      '<p class="muted">À communiquer au patron. Il pourra le changer ensuite depuis Réglages.</p>',
+    boutons: [{ texte: 'Annuler' }, { texte: 'Enregistrer', main: true, action: async (v) => {
+      const p = $('#np', v).value.replace(/\D/g, '');
+      if (p.length !== 6) { toast('Le code PIN doit contenir 6 chiffres.'); return false; }
+      await rpc('admin_reset_patron_pin', { p_club_id: f.id, p_pin: p });
+      return { pin: p };
+    } }],
+  });
+  if (ok && ok.pin) toast(`PIN réinitialisé : ${ok.pin}`);
+}
+
+// ---------- creer un club ----------
+const DUREES = [['1', '1 mois'], ['3', '3 mois'], ['6', '6 mois'], ['12', '1 an']];
+async function nouveauClub() {
+  const ok = await fenetre({
+    titre: 'Nouveau club',
+    html: champ('nom', 'Nom du club', '') +
+      champ('plog', 'Identifiant du patron', 'patron', 'text', 'autocapitalize="off"') +
+      champ('ppin', 'Code PIN du patron (6 chiffres)', '', 'text', 'inputmode="numeric" maxlength="6"') +
+      champ('pnom', 'Nom du patron', '') +
+      champ('tel', 'Téléphone (facultatif)', '', 'tel', 'inputmode="tel"') +
+      choix('dur', "Abonnement de départ", DUREES, '1') +
+      champ('px', 'Prix mensuel (FCFA)', '25000', 'number', 'min="0" inputmode="numeric"'),
+    boutons: [{ texte: 'Annuler' }, { texte: 'Créer le club', main: true, action: async (v) => {
+      const nom = $('#nom', v).value.trim();
+      const plog = $('#plog', v).value.trim().toLowerCase();
+      const ppin = $('#ppin', v).value.replace(/\D/g, '');
+      const pnom = $('#pnom', v).value.trim();
+      const px = parseInt($('#px', v).value, 10);
+      if (!nom) { toast('Donnez un nom au club.'); return false; }
+      if (!/^[a-z0-9._-]{3,30}$/.test(plog)) { toast('Identifiant : 3 à 30 lettres/chiffres.'); return false; }
+      if (ppin.length !== 6) { toast('Le code PIN doit contenir 6 chiffres.'); return false; }
+      if (!pnom) { toast('Indiquez le nom du patron.'); return false; }
+      if (!(px >= 0)) { toast('Prix invalide.'); return false; }
+      const r = await rpc('admin_create_club', {
+        p_club_name: nom, p_patron_login: plog, p_patron_pin: ppin, p_patron_name: pnom,
+        p_phone: $('#tel', v).value.trim() || null, p_months: parseInt($('#dur', v).value, 10), p_monthly_price: px,
+      });
+      return { ...r, patron_login: plog, telephone: $('#tel', v).value.trim(), patron: pnom, nom };
+    } }],
+  });
+  if (!ok || !ok.code) return;
+  await charger();
+  await fenetre({
+    titre: 'Club créé',
+    html: `<p class="muted">Donnez ce code au club. Il le saisit une fois sur chaque appareil, puis se connecte avec l'identifiant <b>${esc(ok.patron_login)}</b> et son code PIN.</p>
+      <div class="keybox key">${esc(ok.code)}</div>`,
+    boutons: [{ texte: 'Fermer' },
+      { texte: 'Copier le code', action: () => { copier(ok.code); return false; } },
+      { texte: 'WhatsApp', main: true, action: () => { whatsapp(ok.telephone, texteCode(ok)); return false; } }],
+  });
+}
+
+// ---------- demarrage ----------
+try { const t = localStorage.getItem('yds-theme'); if (t) document.documentElement.dataset.theme = t; } catch {}
+let dernierId = null;
+sb.auth.onAuthStateChange((evt, session) => {
+  if (evt === 'SIGNED_OUT' || !session) { dernierId = null; S.fiche = null; ecranConnexion(); return; }
+  if (evt === 'TOKEN_REFRESHED' && dernierId === session.user.id) return;
+  if (dernierId === session.user.id && evt !== 'SIGNED_IN') return;
+  dernierId = session.user.id;
+  setTimeout(() => demarrer(session.user), 0);
+});
+sb.auth.getSession().then(({ data }) => { if (!data.session) ecranConnexion(); });
+</script>
+</body>
+</html>

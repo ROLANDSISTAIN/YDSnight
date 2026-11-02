@@ -264,6 +264,7 @@ begin
     'etat', public._club_etat(c), 'expire_le', c.expires_at,
     'mensuel', c.monthly_price, 'suspendu', c.suspended, 'telephone', c.phone,
     'patron', (select m.display_name from public.members m where m.club_id = c.id and m.role = 'patron' limit 1),
+    'patron_login', (select m.login from public.members m where m.club_id = c.id and m.role = 'patron' limit 1),
     'equipe', (select count(*) from public.members m where m.club_id = c.id and m.active),
     'paiements', (select coalesce(jsonb_agg(jsonb_build_object(
         'id', p.id, 'montant', p.amount, 'mois', p.months, 'moyen', p.method,
