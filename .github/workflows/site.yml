@@ -1,5 +1,5 @@
-# Fabrique la version web de Harem Club (patron sur iPhone ou ordinateur) et la publie sur GitHub Pages.
-# Adresse : https://ydstechnolgy.github.io/HAREM-CLUB/
+# Fabrique la version web de YDS Night (patron sur iPhone ou ordinateur) et la publie sur GitHub Pages.
+# Adresse : https://rolandsistain.github.io/ydsnight/
 name: Site web
 
 on:
@@ -42,7 +42,7 @@ jobs:
             --base-href "/${{ github.event.repository.name }}/" \
             --build-name=1.0.${{ github.run_number }}
           # Nouvelle version du site : le téléphone remplace son ancienne copie.
-          sed -i "s/harem-club-v1/harem-club-${{ github.run_number }}/" build/web/sw.js
+          sed -i "s/yds-night-v1/yds-night-${{ github.run_number }}/" build/web/sw.js
           ls -lh build/web
       - uses: actions/upload-pages-artifact@v3
         with:

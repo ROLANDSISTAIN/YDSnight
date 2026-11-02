@@ -1,10 +1,10 @@
-# Fabrique Harem Club sur les serveurs de GitHub et publie une version dans « Releases » :
-#   - harem-club.apk                  : application Android
-#   - harem-club-ancien-telephone.apk : Android, pour les téléphones anciens (32 bits)
-#   - Harem-Club-Installation.exe     : programme d'installation Windows
+# Fabrique YDS Night sur les serveurs de GitHub et publie une version dans « Releases » :
+#   - yds-night.apk                  : application Android
+#   - yds-night-ancien-telephone.apk : Android, pour les téléphones anciens (32 bits)
+#   - YDS-Night-Installation.exe     : programme d'installation Windows
 # Liens toujours à jour :
-#   https://github.com/ydstechnolgy/HAREM-CLUB/releases/latest/download/harem-club.apk
-#   https://github.com/ydstechnolgy/HAREM-CLUB/releases/latest/download/Harem-Club-Installation.exe
+#   https://github.com/ROLANDSISTAIN/YDSnight/releases/latest/download/yds-night.apk
+#   https://github.com/ROLANDSISTAIN/YDSnight/releases/latest/download/YDS-Night-Installation.exe
 name: Livraison (Android + Windows)
 
 on:
@@ -24,8 +24,7 @@ permissions:
   contents: write
 
 env:
-  # Numéro de version : 1.0.<numéro de fabrication>. (+100 : marge pour
-  # les numéros Android)
+  # Numéro de version : 1.0.<numéro de fabrication>.
   NUMERO: ${{ github.run_number }}
 
 jobs:
@@ -33,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD || secrets.HAREMCLUB }}
+      KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -46,17 +45,18 @@ jobs:
           cache: true
 
       # Signature définitive : utilisée seulement si les secrets existent.
+      # Sans eux, l'APK est quand même fabriqué (signature de test, installable).
       - name: Signature
         if: env.KEYSTORE_BASE64 != ''
         run: |
-          echo "$KEYSTORE_BASE64" | tr -d ' \r\n\t' | base64 -d > android/app/haremclub.jks
+          echo "$KEYSTORE_BASE64" | tr -d ' \r\n\t' | base64 -d > android/app/ydsnight.jks
           KEYSTORE_PASSWORD=$(printf '%s' "$KEYSTORE_PASSWORD" | tr -d ' \r\n\t')
-          keytool -list -keystore android/app/haremclub.jks -storepass "$KEYSTORE_PASSWORD" >/dev/null 2>&1 || echo "::error::La clé Android ou son mot de passe ne correspond pas (secrets GitHub)."
+          keytool -list -keystore android/app/ydsnight.jks -storepass "$KEYSTORE_PASSWORD" >/dev/null 2>&1 || echo "::error::La clé Android ou son mot de passe ne correspond pas (secrets GitHub)."
           cat > android/key.properties <<PROPS
-          storeFile=haremclub.jks
+          storeFile=ydsnight.jks
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEYSTORE_PASSWORD
-          keyAlias=haremclub
+          keyAlias=ydsnight
           PROPS
 
       - run: flutter pub get
@@ -71,8 +71,8 @@ jobs:
       - name: Noms des fichiers
         run: |
           mkdir livraison
-          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk livraison/harem-club.apk
-          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk livraison/harem-club-ancien-telephone.apk
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk livraison/yds-night.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk livraison/yds-night-ancien-telephone.apk
           ls -lh livraison
       - uses: actions/upload-artifact@v4
         with:
@@ -105,18 +105,18 @@ jobs:
       - name: Programme d'installation
         shell: pwsh
         env:
-          HAREM_VERSION: 1.0.${{ env.NUMERO }}
+          YDS_VERSION: 1.0.${{ env.NUMERO }}
         run: |
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
-          & $iscc "installateur\harem_club.iss"
+          & $iscc "installateur\yds_night.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Get-ChildItem livraison
 
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: livraison/Harem-Club-Installation.exe
+          path: livraison/YDS-Night-Installation.exe
 
   publier:
     needs: [android, windows]
@@ -132,10 +132,10 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ env.NUMERO }}
-          name: Harem Club · version 1.0.${{ env.NUMERO }}
+          name: YDS Night · version 1.0.${{ env.NUMERO }}
           make_latest: true
           body: |
-            **Windows** : Harem-Club-Installation.exe — à ouvrir sur le PC, puis suivre l'assistant.
-            **Android** : harem-club.apk — pour la plupart des téléphones ;
-            harem-club-ancien-telephone.apk seulement si le premier ne s'installe pas.
+            **Windows** : YDS-Night-Installation.exe — à ouvrir sur le PC, puis suivre l'assistant.
+            **Android** : yds-night.apk — pour la plupart des téléphones ;
+            yds-night-ancien-telephone.apk seulement si le premier ne s'installe pas.
           files: livraison/*

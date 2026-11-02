@@ -1,13 +1,13 @@
 {
-    "name": "Harem Club",
-    "short_name": "Harem Club",
+    "name": "YDS Night",
+    "short_name": "YDS Night",
     "start_url": ".",
     "scope": ".",
     "lang": "fr",
     "display": "standalone",
     "background_color": "#0E0C0A",
     "theme_color": "#0E0C0A",
-    "description": "Gestion du Harem Club : tables, bar, caisse, stock.",
+    "description": "Gestion de boite de nuit : serveuses, bar, caisse, stock.",
     "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
