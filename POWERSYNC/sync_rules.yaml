@@ -2,21 +2,23 @@
 # YDS NIGHT · Regles de synchronisation PowerSync (Sync Streams)
 # A coller dans le tableau de bord PowerSync > Sync Streams, puis "Deploy".
 #
-# Principe : chaque appareil ne recoit QUE les donnees de SON club.
-#   - Tout le monde (patron, gerant, serveuse) : le club, les reglages,
-#     l'equipe, les tables, le menu, les categories, les soirees.
-#   - Patron et gerant : toutes les notes, encaissements, caisse, stock.
-#   - Serveuse : seulement SES notes (et leurs boissons/paiements).
-# Les prix d'achat et les couts ne sont JAMAIS synchronises (ils restent
-# sur le serveur ; le patron les voit via les rapports).
+# Principe : chaque appareil ne recoit QUE les donnees de SON club
+# (bucket par club_id). L'isolation entre clubs est donc totale.
+# A l'interieur d'un club, la distinction gerant / serveuse (une serveuse
+# ne voit que ses tables) est appliquee par l'application et par la
+# securite par ligne cote serveur.
+#
+# Les prix d'achat et les couts ne sont JAMAIS synchronises : les colonnes
+# purchase_price (products), cost_price (tab_items, stock_entries) sont
+# volontairement absentes des requetes ci-dessous. Le patron les consulte
+# via les rapports (fonctions serveur).
 # =====================================================================
 
 config:
   edition: 3
 
 streams:
-  # ----- Commun a tous les membres du club -----
-  club_commun:
+  club:
     auto_subscribe: true
     with:
       mon_club: SELECT club_id FROM members WHERE user_id = auth.user_id() AND active = true
@@ -32,37 +34,15 @@ streams:
                sort_order, created_at, updated_at
           FROM products WHERE club_id IN mon_club
       - SELECT * FROM nights WHERE club_id IN mon_club
-
-  # ----- Patron et gerant : toute l'activite du club -----
-  staff:
-    auto_subscribe: true
-    with:
-      club_staff: SELECT club_id FROM members
-                    WHERE user_id = auth.user_id() AND active = true AND role IN ('patron', 'gerant')
-    queries:
-      - SELECT * FROM tabs WHERE club_id IN club_staff
+      - SELECT * FROM tabs WHERE club_id IN mon_club
       - SELECT id, club_id, tab_id, product_id, product_name, quantity, unit_price, status,
                requested_at, requested_by, served_by, served_at, removed_by, removed_at, removed_reason
-          FROM tab_items WHERE club_id IN club_staff
-      - SELECT * FROM payments WHERE club_id IN club_staff
-      - SELECT * FROM cash_movements WHERE club_id IN club_staff
-      - SELECT * FROM expenses WHERE club_id IN club_staff
-      - SELECT * FROM suppliers WHERE club_id IN club_staff
-      - SELECT * FROM inventories WHERE club_id IN club_staff
+          FROM tab_items WHERE club_id IN mon_club
+      - SELECT * FROM payments WHERE club_id IN mon_club
+      - SELECT * FROM cash_movements WHERE club_id IN mon_club
+      - SELECT * FROM expenses WHERE club_id IN mon_club
+      - SELECT * FROM suppliers WHERE club_id IN mon_club
+      - SELECT * FROM inventories WHERE club_id IN mon_club
       - SELECT id, club_id, product_id, quantity, supplier_id, note, member_id, created_at
-          FROM stock_entries WHERE club_id IN club_staff
-      - SELECT * FROM stock_movements WHERE club_id IN club_staff
-
-  # ----- Serveuse : seulement ses propres notes -----
-  serveuse:
-    auto_subscribe: true
-    with:
-      mes_notes: SELECT t.id FROM tabs t
-                   JOIN members m ON m.id = t.waitress_id
-                   WHERE m.user_id = auth.user_id() AND m.active = true
-    queries:
-      - SELECT * FROM tabs WHERE id IN mes_notes
-      - SELECT id, club_id, tab_id, product_id, product_name, quantity, unit_price, status,
-               requested_at, requested_by, served_by, served_at, removed_by, removed_at, removed_reason
-          FROM tab_items WHERE tab_id IN mes_notes
-      - SELECT * FROM payments WHERE tab_id IN mes_notes
+          FROM stock_entries WHERE club_id IN mon_club
+      - SELECT * FROM stock_movements WHERE club_id IN mon_club
