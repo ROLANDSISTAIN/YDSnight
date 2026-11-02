@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.ydstech.haremclub"
+        applicationId = "com.ydstech.ydsnight"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = maxOf(flutter.minSdkVersion, 24) // base locale hors ligne (PowerSync)

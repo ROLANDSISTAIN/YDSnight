@@ -1,5 +1,5 @@
 name: harem_club
-description: "Harem Club, logiciel de gestion du club : tables, bar, caisse, stock."
+description: "YDS Night, logiciel de gestion de boite de nuit : serveuses, bar, caisse, stock."
 publish_to: 'none'
 
 version: 1.0.0+1
