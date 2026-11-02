@@ -27,7 +27,8 @@ create table if not exists public.clubs (
 -- Reglages du club (une seule ligne par club)
 -- ---------------------------------------------------------------------
 create table if not exists public.settings (
-  club_id          uuid primary key references public.clubs(id) on delete cascade,
+  id               uuid primary key default gen_random_uuid(),
+  club_id          uuid not null unique references public.clubs(id) on delete cascade,
   club_name        text not null default 'Ma boite de nuit',
   phone            text,
   ticket_header    text not null default 'MA BOITE',
