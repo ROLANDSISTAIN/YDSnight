@@ -13,8 +13,9 @@ class Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.star, color: HC.or, size: taille * 0.45),
-        Text('HAREM',
+        Icon(Icons.nightlife, color: HC.or, size: taille * 0.5),
+        SizedBox(height: taille * 0.1),
+        Text('YDS',
             style: TextStyle(
                 fontFamily: 'serif',
                 fontSize: taille,
@@ -22,12 +23,12 @@ class Logo extends StatelessWidget {
                 letterSpacing: taille * 0.12,
                 color: HC.or,
                 height: 1.1)),
-        Text('— CLUB —',
+        Text('— NIGHT —',
             style: TextStyle(fontSize: taille * 0.34, letterSpacing: taille * 0.2, color: HC.or, fontWeight: FontWeight.w700)),
         if (slogan) ...[
           SizedBox(height: taille * 0.2),
-          Text('LA SKINNY EST DANS LA VILLE',
-              style: TextStyle(fontSize: taille * 0.22, letterSpacing: 1.5, color: HC.orFonce, fontWeight: FontWeight.w700)),
+          Text('GESTION DE BOÎTE DE NUIT',
+              style: TextStyle(fontSize: taille * 0.2, letterSpacing: 1.5, color: HC.orFonce, fontWeight: FontWeight.w700)),
         ],
       ],
     );
