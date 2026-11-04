@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../theme/harem_theme.dart';
 
-/// Nom du club, en or, comme sur le logo.
+/// Logo de Nocta : une lune et le nom, en cyan.
 class Logo extends StatelessWidget {
   const Logo({super.key, this.taille = 40, this.slogan = true});
   final double taille;
+
+  /// Gardé pour compatibilité des appels ; Nocta n'affiche pas de slogan
+  /// (le logiciel sert aussi bien aux boîtes de nuit qu'aux bars).
   final bool slogan;
 
   @override
@@ -13,23 +16,16 @@ class Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.nightlife, color: HC.or, size: taille * 0.5),
-        SizedBox(height: taille * 0.1),
-        Text('YDS',
+        Icon(Icons.dark_mode, color: HC.or, size: taille * 0.62),
+        SizedBox(height: taille * 0.16),
+        Text('NOCTA',
             style: TextStyle(
                 fontFamily: 'serif',
                 fontSize: taille,
                 fontWeight: FontWeight.w800,
-                letterSpacing: taille * 0.12,
+                letterSpacing: taille * 0.22,
                 color: HC.or,
                 height: 1.1)),
-        Text('— NIGHT —',
-            style: TextStyle(fontSize: taille * 0.34, letterSpacing: taille * 0.2, color: HC.or, fontWeight: FontWeight.w700)),
-        if (slogan) ...[
-          SizedBox(height: taille * 0.2),
-          Text('GESTION DE BOÎTE DE NUIT',
-              style: TextStyle(fontSize: taille * 0.2, letterSpacing: 1.5, color: HC.orFonce, fontWeight: FontWeight.w700)),
-        ],
       ],
     );
   }

@@ -43,7 +43,7 @@ jobs:
             --base-href "/${{ github.event.repository.name }}/" \
             --build-name=1.0.${{ github.run_number }}
           # Nouvelle version du site : le téléphone remplace son ancienne copie.
-          sed -i "s/yds-night-v1/yds-night-${{ github.run_number }}/" build/web/sw.js
+          sed -i "s/nocta-v1/nocta-${{ github.run_number }}/" build/web/sw.js
           # Espace admin (page autonome) servi sous /admin/
           cp -r admin build/web/admin
           ls -lh build/web

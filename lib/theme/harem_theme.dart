@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
-/// Couleurs du Harem Club : noir et or, comme le logo.
-/// Un seul mode, sombre : lisible dans la pénombre du club.
+/// Couleurs de Nocta : bleu nuit et cyan.
+/// Un seul mode, sombre : lisible dans la pénombre du club ou du bar.
+/// (Les noms « or » sont gardés pour l'historique du code : ce sont
+/// désormais les teintes cyan de l'accent.)
 class HC {
-  static const fond = Color(0xFF0E0C0A);
-  static const surface = Color(0xFF1A1612);
-  static const surface2 = Color(0xFF241E17);
-  static const bordure = Color(0xFF3A3127);
-  static const or = Color(0xFFF5A800);
-  static const orClair = Color(0xFFFFC94A);
-  static const orFonce = Color(0xFF8A6000);
-  static const texte = Color(0xFFF3EDE4);
-  static const gris = Color(0xFFA39A8C);
+  static const fond = Color(0xFF070D1C);
+  static const surface = Color(0xFF0F1B33);
+  static const surface2 = Color(0xFF142440);
+  static const bordure = Color(0xFF263C63);
+  static const or = Color(0xFF22D3EE);        // accent cyan
+  static const orClair = Color(0xFF6EE7FB);
+  static const orFonce = Color(0xFF2AA7BD);
+  static const texte = Color(0xFFE6F0FF);
+  static const gris = Color(0xFF8CA4C6);
   static const vert = Color(0xFF5CC489);
   static const rouge = Color(0xFFF07167);
   static const bleu = Color(0xFF6FA8FF);
 
   static const fondVert = Color(0xFF15281D);
   static const fondRouge = Color(0xFF331816);
-  static const fondOr = Color(0xFF2E2208);
+  static const fondOr = Color(0xFF0E2E3A);     // pastille d'accent (cyan foncé)
   static const fondBleu = Color(0xFF14213A);
 }
 
@@ -29,9 +31,9 @@ class HaremTheme {
       brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
         primary: HC.or,
-        onPrimary: Color(0xFF1A1200),
+        onPrimary: Color(0xFF04121F),
         secondary: HC.orClair,
-        onSecondary: Color(0xFF1A1200),
+        onSecondary: Color(0xFF04121F),
         surface: HC.surface,
         onSurface: HC.texte,
         surfaceContainerHighest: HC.surface2,
@@ -74,7 +76,7 @@ class HaremTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: HC.or,
-          foregroundColor: const Color(0xFF1A1200),
+          foregroundColor: const Color(0xFF04121F),
           minimumSize: const Size(64, 48),
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           shape: RoundedRectangleBorder(borderRadius: arrondi),

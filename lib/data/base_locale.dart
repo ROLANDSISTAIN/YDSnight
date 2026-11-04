@@ -9,7 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../config.dart';
 import '../services/appareil.dart' as appareil;
 
-/// Base de données locale de YDS Night (sur le PC ou le téléphone).
+/// Base de données locale de Nocta (sur le PC ou le téléphone).
 ///
 /// Le logiciel lit et écrit toujours ici, même sans internet.
 /// PowerSync envoie les changements à Supabase dès que la connexion revient,
@@ -310,7 +310,7 @@ class _ConnecteurSupabase extends PowerSyncBackendConnector {
                 maintenantIso(),
               ],
             );
-            debugPrint('YDS Night : envoi refusé (${op.table}) : ${e.message}');
+            debugPrint('Nocta : envoi refusé (${op.table}) : ${e.message}');
           } else {
             rethrow; // erreur passagère (réseau…) : PowerSync réessaiera plus tard
           }
@@ -324,7 +324,7 @@ class _ConnecteurSupabase extends PowerSyncBackendConnector {
     if (op.table == 'operations') {
       final fonction = op.opData?['type'] as String?;
       if (fonction == null || !_fonctionsAutorisees.contains(fonction)) {
-        debugPrint('YDS Night : opération inconnue $fonction');
+        debugPrint('Nocta : opération inconnue $fonction');
         return;
       }
       final params = jsonDecode(op.opData?['payload'] as String? ?? '{}') as Map<String, dynamic>;

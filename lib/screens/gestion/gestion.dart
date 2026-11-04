@@ -112,7 +112,7 @@ class _EspaceGestionState extends State<EspaceGestion> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(children: [
                 const Icon(Icons.star, color: HC.or),
-                const Text('YDS', style: TextStyle(color: HC.or, fontWeight: FontWeight.w900, letterSpacing: 3)),
+                const Text('NOCTA', style: TextStyle(color: HC.or, fontWeight: FontWeight.w900, letterSpacing: 3)),
                 Text('${widget.membre.nom} · ${widget.membre.libelleRole}',
                     style: const TextStyle(color: HC.gris, fontSize: 11.5)),
               ]),
@@ -142,7 +142,7 @@ class _EspaceGestionState extends State<EspaceGestion> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('YDS NIGHT',
+                const Text('NOCTA',
                     style: TextStyle(color: HC.or, fontWeight: FontWeight.w900, letterSpacing: 3, fontSize: 18)),
                 Text('${widget.membre.nom} · ${widget.membre.libelleRole}', style: const TextStyle(color: HC.gris)),
               ]),

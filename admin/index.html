@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>YDS Night · Admin</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E0C0A'/%3E%3Ctext x='32' y='42' font-size='24' font-family='Georgia' font-weight='700' text-anchor='middle' fill='%23F5A800'%3EYDS%3C/text%3E%3C/svg%3E">
+<title>Nocta · Admin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070D1C'/%3E%3Ctext x='32' y='42' font-size='24' font-family='Georgia' font-weight='700' text-anchor='middle' fill='%2322D3EE'%3EN%3C/text%3E%3C/svg%3E">
 <style>
 :root{
-  --page:#F7F5F2;--surface:#fff;--nude:#F3ECDD;--prune:#8A6000;--prune-f:#6E4D00;--or:#9A7A36;--txt:#211C14;--gris:#6B6354;
-  --bord:#E7E0D4;--err:#B3261E;--err-f:#FCEBEB;--ok:#2E7D4F;--ok-f:#E5F3EA;--or-f:#F7EEDB;
+  --page:#F3F6FA;--surface:#fff;--nude:#E4F1F5;--prune:#0E7490;--prune-f:#0B5A70;--or:#3C7E8E;--txt:#13202B;--gris:#566573;
+  --bord:#DCE6EC;--err:#B3261E;--err-f:#FCEBEB;--ok:#2E7D4F;--ok-f:#E5F3EA;--or-f:#E4F1F5;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --page:#14110C;--surface:#1F1B14;--nude:#2E281C;--prune:#F5A800;--prune-f:#C98A00;--or:#D9B66E;--txt:#F3ECDD;--gris:#B3A994;
-  --bord:#3C3528;--err:#F28B82;--err-f:#3D2023;--ok:#6FCF97;--ok-f:#1D3428;--or-f:#3A3020;}}
+  --page:#070D1C;--surface:#0F1B33;--nude:#142440;--prune:#22D3EE;--prune-f:#0E7490;--or:#6EE7FB;--txt:#E6F0FF;--gris:#8CA4C6;
+  --bord:#263C63;--err:#F28B82;--err-f:#3D2023;--ok:#6FCF97;--ok-f:#1D3428;--or-f:#0E2E3A;}}
 :root[data-theme="dark"]{
-  --page:#14110C;--surface:#1F1B14;--nude:#2E281C;--prune:#F5A800;--prune-f:#C98A00;--or:#D9B66E;--txt:#F3ECDD;--gris:#B3A994;
-  --bord:#3C3528;--err:#F28B82;--err-f:#3D2023;--ok:#6FCF97;--ok-f:#1D3428;--or-f:#3A3020;}
+  --page:#070D1C;--surface:#0F1B33;--nude:#142440;--prune:#22D3EE;--prune-f:#0E7490;--or:#6EE7FB;--txt:#E6F0FF;--gris:#8CA4C6;
+  --bord:#263C63;--err:#F28B82;--err-f:#3D2023;--ok:#6FCF97;--ok-f:#1D3428;--or-f:#0E2E3A;}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--page);color:var(--txt);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -79,7 +79,7 @@ th{color:var(--gris);font-weight:600}
 <script>
 'use strict';
 // ====================================================================
-// YDS Night · Admin : page d'administration (separee du logiciel des clubs).
+// Nocta · Admin : page d'administration (separee du logiciel des clubs).
 // La cle ci-dessous est la cle PUBLIQUE : la securite est assuree par la
 // base de donnees (seule l'adresse administrateur peut appeler ces fonctions).
 // ====================================================================
@@ -176,7 +176,7 @@ function ecranConnexion(mode = 'connexion', email = '') {
   const titre = { connexion: 'Connexion', inscription: 'Créer le compte administrateur', mdp: 'Mot de passe oublié' }[mode];
   app.innerHTML = `
   <div class="wrap"><div class="login card">
-    <div class="center"><div class="logo" style="font-size:30px">YDS <i>Night</i></div>
+    <div class="center"><div class="logo" style="font-size:30px">NOCTA</div>
     <p class="muted">Espace réservé à l'administrateur</p></div>
     <h3 class="serif" style="font-size:22px;margin-top:8px">${titre}</h3>
     <form id="f" novalidate>
@@ -289,7 +289,7 @@ function erreurPlein(e) {
 function squelette() {
   app.innerHTML = `
   <header class="top"><div class="wrap">
-    <div class="logo">YDS <i>Night</i></div><div class="sp"></div>
+    <div class="logo">NOCTA</div><div class="sp"></div>
     <span class="muted" style="display:none" id="qui"></span>
     <button class="sm" id="th" title="Clair / sombre" aria-label="Clair / sombre">◐</button>
     <button class="sm" id="out">Déconnexion</button>
@@ -422,17 +422,17 @@ function pageFiche(m) {
 
 // ---------- actions sur un club ----------
 function texteCode(f) {
-  return `Bonjour${f.patron ? ' ' + f.patron : ''}, voici le code de votre club YDS Night : ${f.code}\n` +
-    `Sur chaque appareil (PC du bar, téléphone), ouvrez YDS Night, saisissez ce code une seule fois, ` +
+  return `Bonjour${f.patron ? ' ' + f.patron : ''}, voici le code de votre club Nocta : ${f.code}\n` +
+    `Sur chaque appareil (PC du bar, téléphone), ouvrez Nocta, saisissez ce code une seule fois, ` +
     `puis connectez-vous avec votre identifiant « ${esc(f.patron_login || 'patron')} » et votre code PIN. Gardez ce message.`;
 }
 function texteRelance(f) {
   const fin = dcourt(date(f.expire_le));
   const prix = fcfa(f.mensuel);
   const nom = `« ${f.nom} »`;
-  if (f.etat === 'bloque') return `Bonjour${f.patron ? ' ' + f.patron : ''}, le logiciel YDS Night de ${nom} est en pause : l'abonnement n'est pas réglé. Vos données sont en sécurité. Dès réception de ${prix}, nous réactivons immédiatement.`;
-  if (f.etat === 'grace') return `Bonjour${f.patron ? ' ' + f.patron : ''}, l'abonnement YDS Night de ${nom} est arrivé à échéance le ${fin}. Merci de régler ${prix} pour éviter la coupure du logiciel.`;
-  return `Bonjour${f.patron ? ' ' + f.patron : ''}, l'abonnement YDS Night de ${nom} se termine le ${fin}. Pensez à le renouveler (${prix}/mois) pour continuer sans interruption. Merci !`;
+  if (f.etat === 'bloque') return `Bonjour${f.patron ? ' ' + f.patron : ''}, le logiciel Nocta de ${nom} est en pause : l'abonnement n'est pas réglé. Vos données sont en sécurité. Dès réception de ${prix}, nous réactivons immédiatement.`;
+  if (f.etat === 'grace') return `Bonjour${f.patron ? ' ' + f.patron : ''}, l'abonnement Nocta de ${nom} est arrivé à échéance le ${fin}. Merci de régler ${prix} pour éviter la coupure du logiciel.`;
+  return `Bonjour${f.patron ? ' ' + f.patron : ''}, l'abonnement Nocta de ${nom} se termine le ${fin}. Pensez à le renouveler (${prix}/mois) pour continuer sans interruption. Merci !`;
 }
 
 async function actionClub(a, f) {
