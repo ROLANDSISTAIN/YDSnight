@@ -148,6 +148,9 @@ begin
     on conflict (club_id, name) do nothing;
   end loop;
 
+  -- Menu de base (boissons + prix) : voir 11_menu_boissons.sql.
+  perform public._seed_club_menu(p_club);
+
   -- Quelques tables de depart
   for v_t in select unnest(array['VIP 1', 'VIP 2', 'Table 1', 'Table 2', 'Table 3', 'Table 4', 'Comptoir'])
   loop

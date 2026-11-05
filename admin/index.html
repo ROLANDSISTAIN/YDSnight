@@ -408,6 +408,7 @@ function pageFiche(m) {
       <button class="sm" data-a="fin">Date de fin</button>
       <button class="sm" data-a="prix">Changer le prix</button>
       <button class="sm" data-a="pin">Réinitialiser le PIN patron</button>
+      <button class="sm" data-a="menu">Charger le menu de base</button>
       <button class="sm ${f.suspended ? '' : 'danger'}" data-a="susp">${f.suspended ? 'Réactiver' : 'Suspendre'}</button>
       <button class="sm" data-a="rel">Relancer (WhatsApp)</button>
       <button class="sm danger" data-a="sup">Supprimer le club</button>
@@ -444,6 +445,12 @@ async function actionClub(a, f) {
     if (a === 'fin') return dateFin(f);
     if (a === 'prix') return changerPrix(f);
     if (a === 'pin') return resetPin(f);
+    if (a === 'menu') {
+      if (!(await confirmer('Charger le menu de base', 'Ajoute les boissons et prix de base manquants à ce club. Les prix déjà modifiés par le patron ne sont pas touchés.', 'Charger'))) return;
+      const n = await rpc('admin_seed_menu', { p_club_id: f.id });
+      toast(nb(n) > 0 ? `${n} boisson(s) ajoutée(s).` : 'Menu déjà complet.');
+      return;
+    }
     if (a === 'susp') {
       if (!f.suspended && !(await confirmer('Suspendre le club', 'Le logiciel sera bloqué immédiatement pour ce club, jusqu\'à réactivation.', 'Suspendre', true))) return;
       await rpc('admin_set_suspended', { p_club_id: f.id, p_suspendre: !f.suspended });
