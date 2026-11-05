@@ -28,7 +28,7 @@ class YdsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Nocta',
+      title: 'YDS Night',
       debugShowCheckedModeBanner: false,
       theme: HaremTheme.theme(),
       locale: const Locale('fr', 'FR'),
@@ -59,7 +59,7 @@ class _ErreurDemarrage extends StatelessWidget {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               const Icon(Icons.error_outline, size: 48, color: HC.rouge),
               const SizedBox(height: 16),
-              const Text('Nocta n\'a pas pu démarrer',
+              const Text('YDS Night n\'a pas pu démarrer',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
               const SizedBox(height: 12),
               const Text('Fermez complètement l\'application puis rouvrez-la. '

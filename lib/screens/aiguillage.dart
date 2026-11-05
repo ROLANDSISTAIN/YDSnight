@@ -160,7 +160,7 @@ class _ChargementState extends State<_Chargement> {
             titre: 'Abonnement terminé',
             texte: entree.membre.estPatron
                 ? 'L\'abonnement de votre club est arrivé à échéance. '
-                  'Contactez Nocta pour le renouveler et réactiver le logiciel.'
+                  'Contactez YDS Night pour le renouveler et réactiver le logiciel.'
                 : 'Le logiciel est en pause : l\'abonnement du club doit être renouvelé. '
                   'Prévenez le patron.',
             boutons: [

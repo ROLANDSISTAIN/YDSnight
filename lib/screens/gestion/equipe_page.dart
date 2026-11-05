@@ -92,7 +92,7 @@ class EquipePage extends StatelessWidget {
           content: Text('Donnez ces informations à ${nom.text.trim()} :\n\n'
               'Identifiant : ${identifiant.text.trim().toLowerCase()}\n'
               'Code PIN : ${pin.text.trim()}\n\n'
-              'Elle se connecte dans l\'application Nocta.'),
+              'Elle se connecte dans l\'application YDS Night.'),
           actions: [FilledButton(onPressed: () => Navigator.pop(ctx), child: const Text('OK'))],
         ),
       );

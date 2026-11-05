@@ -59,7 +59,7 @@ class Recu {
         'SELECT method, SUM(amount) AS a FROM payments WHERE tab_id = ? GROUP BY method', [tabId]);
     final reglages = await db.getOptional('SELECT * FROM settings LIMIT 1');
 
-    final entete = '${reglages?['ticket_header'] ?? 'NOCTA'}';
+    final entete = '${reglages?['ticket_header'] ?? 'YDS NIGHT'}';
     final telephone = reglages?['phone'] as String?;
     final pied = '${reglages?['ticket_footer'] ?? 'Merci de votre visite'}';
     final date = DateTime.tryParse('${note['paid_at'] ?? note['requested_at'] ?? ''}')?.toLocal() ?? DateTime.now();
@@ -114,10 +114,10 @@ class Recu {
     final p = kIsWeb ? null : await imprimante();
     if (p != null) {
       final ok = await Printing.directPrintPdf(
-          printer: p, format: PdfPageFormat.roll57, name: 'Recu-Nocta', onLayout: (_) async => octets);
+          printer: p, format: PdfPageFormat.roll57, name: 'Recu-YDS-Night', onLayout: (_) async => octets);
       if (ok) return;
     }
-    await Printing.layoutPdf(name: 'Recu-Nocta', format: PdfPageFormat.roll57, onLayout: (_) async => octets);
+    await Printing.layoutPdf(name: 'Recu-YDS-Night', format: PdfPageFormat.roll57, onLayout: (_) async => octets);
   }
 
   // ---------------------------------------------------------------- WhatsApp
@@ -141,7 +141,7 @@ class Recu {
     final reste = total - entier(note['paid_amount']);
 
     final b = StringBuffer()
-      ..writeln('*${reglages?['ticket_header'] ?? 'NOCTA'}*')
+      ..writeln('*${reglages?['ticket_header'] ?? 'YDS NIGHT'}*')
       ..writeln(note['ticket_number'] != null ? 'Reçu n° ${note['ticket_number']}' : 'Note')
       ..writeln('${note['table_name'] ?? 'Table'} · ${dateCourte(date)} ${_heure(date)}')
       ..writeln();

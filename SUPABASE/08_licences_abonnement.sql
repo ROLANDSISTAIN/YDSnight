@@ -40,7 +40,7 @@ create or replace function public._exiger_admin() returns void
 language plpgsql stable security definer set search_path = public as $$
 begin
   if not public.is_platform_admin() then
-    raise exception 'Reserve a l''administrateur de Nocta';
+    raise exception 'Reserve a l''administrateur de YDS Night';
   end if;
 end $$;
 
@@ -105,7 +105,7 @@ begin
   select * into c from public.clubs where id = public.my_club();
   if not found then raise exception 'ABONNEMENT: aucun club'; end if;
   if public._club_etat(c) = 'bloque' then
-    raise exception 'ABONNEMENT_EXPIRE: abonnement termine, contactez Nocta';
+    raise exception 'ABONNEMENT_EXPIRE: abonnement termine, contactez YDS Night';
   end if;
 end $$;
 

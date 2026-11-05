@@ -4,7 +4,7 @@
 //   sinon la copie gardée sur l'appareil.
 // - Polices d'écriture : copie gardée d'abord.
 // - Données (Supabase, PowerSync) : jamais gardées ici, l'application s'en occupe.
-const CACHE = 'nocta-v1';
+const CACHE = 'yds-night-v1';
 const POLICES = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', () => self.skipWaiting());

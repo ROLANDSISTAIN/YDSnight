@@ -8,7 +8,7 @@ import '../theme/harem_theme.dart';
 import '../widgets/logo.dart';
 
 /// Mise en place de l'appareil : on saisit une fois le CODE DU CLUB
-/// (fourni par Nocta). L'appareil le retient ensuite.
+/// (fourni par YDS Night). L'appareil le retient ensuite.
 class EcranCodeClub extends StatefulWidget {
   const EcranCodeClub({super.key, required this.onEnregistre});
   final VoidCallback onEnregistre;
@@ -39,7 +39,7 @@ class _EcranCodeClubState extends State<EcranCodeClub> {
       final res = await Supabase.instance.client.rpc('club_by_code', params: {'p_code': code});
       final data = (res is Map) ? res : null;
       if (data == null || data['trouve'] != true) {
-        setState(() => _erreur = 'Code du club inconnu. Vérifiez-le auprès de Nocta.');
+        setState(() => _erreur = 'Code du club inconnu. Vérifiez-le auprès de YDS Night.');
         return;
       }
       await enregistrerClub(data['code'] as String, (data['nom'] as String?) ?? '');
@@ -70,7 +70,7 @@ class _EcranCodeClubState extends State<EcranCodeClub> {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 8),
                   const Text(
-                    'Entrez le code de votre club (fourni par Nocta). '
+                    'Entrez le code de votre club (fourni par YDS Night). '
                     'Vous ne le saisirez qu\'une seule fois sur cet appareil.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: HC.gris),
