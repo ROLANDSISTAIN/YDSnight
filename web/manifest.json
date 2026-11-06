@@ -7,7 +7,7 @@
     "display": "standalone",
     "background_color": "#0E0C0A",
     "theme_color": "#0E0C0A",
-    "description": "Gestion de boite de nuit : serveuses, bar, caisse, stock.",
+    "description": "Gestion de bar et club : serveuses, bar, caisse, stock.",
     "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
